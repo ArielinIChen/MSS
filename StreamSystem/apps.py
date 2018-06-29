@@ -4,5 +4,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class StreamsystemConfig(AppConfig):
+class StreamSystemConfig(AppConfig):
     name = 'StreamSystem'
