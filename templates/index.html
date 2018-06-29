@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/js.cookie.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+</head>
+<body>
+    <p></p>
+    <div id="add_stream1">
+        <form role="form" id="add_stream_form">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <select class="form-control" name="stream_method">
+                        <option>streamlink</option>
+                        <option>relay</option>
+                        <option>publish</option>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="col-lg-3 form-control" name="channel_name" placeholder="channel_name">
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" name="src_path" placeholder="src_path">
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" name="dst_path" placeholder="dst_path">
+                </div>
+            </div>
+{#            <input type="text" name="stream_method" placeholder="stream_method">#}
+        </form>
+        <button type="submit" class="btn btn-default" id="add_stream_btn">Start</button>
+    </div>
+    <br>
+    <p class="col-lg-6 text-white" style="background-color: #613030; color: white; font-size: 20px;">All Streams</p>
+    <p class="col-lg-6 text-white" style="background-color: darkgreen; color: white; font-size: 20px;">Streamlink</p>
+    <p class="col-lg-6 text-white" style="background-color: orangered; color: white; font-size: 20px;">Relay</p>
+    <p class="col-lg-6 text-white" style="background-color: cornflowerblue; color: white; font-size: 20px;">Publish</p>
+
+    <div id="stream_info"></div>
+    <script>
+    $(document).ready(function ShowStreamsInDb() {
+        $.ajax({
+            type: 'get',
+            url: '/show_stream/',
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                if (res[0] === 'Filled') {
+                    var html = '';
+                    html += '<table class="table table-hover" style="table-layout:fixed" id="now_streaming_table">';
+                    html += '<thead><tr>' +
+                        '<th class="col-lg-2">Stream Method</th>' +
+                        '<th class="col-lg-3">Channel Name</th>' +
+                        '<th class="col-lg-7">Source Path</th>' +
+                        '<th class="col-lg-7">Dest Path</th>' +
+                        '<th class="col-lg-3">Create Time</th>' +
+                        '<th class="col-lg-2">Choice</th>' +
+                        '</tr></thead><tbody>';
+                    for (var i = 1; i < res.length; i++) {
+                        html += '<tr>';
+                        if (res[i].stream_method === 'streamlink') {
+                            html += '<td bgcolor=darkgreen class="col-lg-2">';
+                        }
+                        else if (res[i].stream_method === 'relay') {
+                            html += '<td bgcolor=orangered class="col-lg-2">';
+                        }
+                        else if (res[i].stream_method === 'publish') {
+                            html += '<td bgcolor=cornflowerblue class="col-lg-2">';
+                        }
+                        else {
+                            html += '<td bgcolor=white class="col-lg-2"><font size="3">';
+                        }
+                        html += res[i].stream_method + '</font></td>';
+                        html += '<td><font size="3">' + res[i].channel_name + '</font></td>' +
+                            '<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><font size="3">' + res[i].src_path + '</font></td>' +
+                            '<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><font size="3">' + res[i].dst_path + '</font></td>' +
+                            '<td><font size="3">' + res[i].create_time + '</font></td>' +
+                            '<td>' + '<form role="form" id="stream_stop_' + res[i].channel_name + '">' +
+                            '<input type="hidden" name="channel_name" value="' + res[i].channel_name + '">' + '</form>';
+                        if (res[i].stream_method === 'streamlink') {
+                            html += '<button type="submit" class="btn btn-default" style="background-color: darkgreen; color: white;" id="stream_stop">Stop</button>';
+                        }
+                        else if (res[i].stream_method === 'relay') {
+                            html += '<button type="submit" class="btn btn-default" style="background-color: orangered; color: white;" id="stream_stop">Stop</button>';
+                        }
+                        else if (res[i].stream_method === 'publish') {
+                            html += '<button type="submit" class="btn btn-default" style="background-color: cornflowerblue; color: white;" id="stream_stop">Stop</button>';
+                        }
+                        else {
+                            html += '<button type="submit" class="btn btn-default" id="stream_stop">Stop</button>';
+                        }
+                        html += '</td>' + '</tr>';
+                    }
+                    html += '</tbody></table>';
+                    $("div#stream_info").html(html);
+                    $("button#stream_stop").click(function() {
+{#                        var element = $(this).parent().parent().siblings().text();#}
+                        var element = $(this).closest('tr').find('td').eq(1).text();
+                        console.log(element);
+{#                        alert(element);#}
+                        var post_data = JSON.stringify({"channel_name": element});
+                        console.log(post_data);
+                        $.ajax({
+                            type: 'post',
+                            url: '/stream/del/',
+                            dataType: 'json',
+                            data: post_data,
+                            success: function (res) {
+                                console.log(res);
+                                alert(res['success']);
+                                window.location.replace(location.href);
+                            },
+                            error: function (err) {
+                                console.log(err);
+                                alert(err['error']);
+                            }
+                        })
+                    })
+                }
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+        $('button#add_stream_btn').click(function () {
+            var mytext = $('form#add_stream_form').serializeArray();
+            var mydict = {};
+            for (var x in mytext) {
+                mydict[mytext[x].name] = mytext[x].value;
+            }
+            console.log(mydict);
+            $.ajax({
+                type: 'post',
+                url: '/stream/add/',
+                dataType: 'json',
+                data: JSON.stringify(mydict),
+                success: function (res) {
+                    console.log(res);
+                    alert(res['success']);
+                    window.location.replace(location.href);
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert(err['error']);
+                }
+            })
+        })
+    });
+    </script>
+</body>
+
+</html>

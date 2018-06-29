@@ -1,0 +1,2 @@
+[WARNING][2018-06-29 09:59:12,302][Thread-7:1212][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-06-29 10:05:56,030][Thread-19:4576][task_id:django.request][base.py:152][Not Found: /favicon.ico]
