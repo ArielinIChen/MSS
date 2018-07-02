@@ -12,7 +12,7 @@ import os
 from StreamSystem.models import StreamInfo
 
 
-def stop_streams_process(channel_name, **kwargs):
+def stop_stream_process(channel_name, **kwargs):
     stream_info = StreamInfo.objects.filter(channel_name=channel_name)
     if len(stream_info) == 0:
         return {'error': 'Channel_name: %s not found !' % channel_name}
@@ -43,4 +43,4 @@ def stop_streams_process(channel_name, **kwargs):
 
 
 if __name__ == '__main__':
-    stop_streams_process(channel_name='name4')
+    stop_stream_process(channel_name='name4')

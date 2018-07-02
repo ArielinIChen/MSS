@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+import json
+import logging
+
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 
+from StreamSystem.CBV.StreamFunc import StartStreamMixin, StopStreamMixin
 from StreamSystem.models import StreamInfo
-
-from StreamSystem.streamlink_func import start_streamlink
-from StreamSystem.relay_and_publish_func import start_relay_or_publish
-from StreamSystem.stop_stream_func import stop_streams_process
-
-import logging
-import json
-import datetime
 
 # Create your views here.
 
@@ -45,9 +41,9 @@ def show_stream(request):
     return HttpResponse(json.dumps(on_stream_list))
 
 
-@csrf_exempt
-def add_stream(request):
-    if request.method == 'POST':
+class StartStream(JsonResponseMixin, View):
+
+    def post(self, request):
         received_json_data = json.loads(request.body)
         channel_name = received_json_data['channel_name']
         stream_method = received_json_data['stream_method']
@@ -61,22 +57,17 @@ def add_stream(request):
         elif len(channel_name_in_db) > 0:
             return HttpResponse(json.dumps({'error': 'Duplicate channel_name !'}))
         else:
+            reply = StartStreamMixin(channel_name, stream_method, src_path, dst_path)
             if stream_method == 'streamlink':
-                reply = start_streamlink(src_path, dst_path, channel_name)
+                return self.json_response(reply.start_streamlink())
             else:
-                reply = start_relay_or_publish(src_path, dst_path, stream_method, channel_name)
-
-        if reply == 'success':
-            return HttpResponse(json.dumps({'success': 'Create Done!'}))
-        else:
-            return HttpResponse(json.dumps({'error': 'Create Failed!'}))
+                return self.json_response(reply.start_publish_or_relay())
 
 
-@csrf_exempt
-def stop_stream(request):
-    if request.method == 'POST':
+class StopStream(JsonResponseMixin, View):
+    def post(self, request):
         received_json_data = json.loads(request.body)
         channel_name = received_json_data['channel_name']
 
-        reply = stop_streams_process(channel_name)
-        return HttpResponse(json.dumps(reply))
+        reply = StopStreamMixin(channel_name).stop_stream()
+        return self.json_response(reply)
