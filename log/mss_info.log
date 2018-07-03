@@ -105,3 +105,19 @@ Traceback (most recent call last):
   File "D:\Python27\lib\site-packages\django\middleware\common.py", line 115, in process_response
     if response.status_code == 404:
 AttributeError: 'dict' object has no attribute 'status_code'
+[WARNING][2018-07-02 13:44:11,536][Thread-13:13108][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 14:57:13,200][Thread-83:12444][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 14:57:57,045][Thread-91:1324][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 14:59:47,829][Thread-99:13736][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:00:23,970][Thread-107:13316][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:00:37,505][Thread-115:13508][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:05:46,983][Thread-123:13188][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:09:49,176][Thread-147:10900][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:18:25,128][Thread-165:13100][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:18:32,591][Thread-173:12488][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:18:50,822][Thread-181:7256][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:25:23,186][Thread-206:9416][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:26:05,302][Thread-214:7916][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:57:51,740][Thread-229:6016][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 15:59:28,769][Thread-237:14784][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-02 16:01:54,012][Thread-245:1740][task_id:django.request][base.py:152][Not Found: /favicon.ico]
