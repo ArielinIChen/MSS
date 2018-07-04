@@ -11,7 +11,7 @@ from StreamSystem.FBV.stop_stream_func import stop_stream_process
 from StreamSystem.models import StreamInfo
 
 
-def process_check():
+def stream_process_check():
     streams = StreamInfo.objects.all()
     if len(streams) == 0:
         return 'No stream in process'
@@ -23,18 +23,19 @@ def process_check():
             stream_method = stream['stream_method']
             src_path = stream['src_path']
             dst_path = stream['dst_path']
-            ps_count = int(os.popen(check_command % (src_path, dst_path)).read())
-            if ps_count == 0:
-                if stream_method == 'streamlink':
-                    start_streamlink(src_path, dst_path, channel_name)
-                else:
-                    start_relay_or_publish(src_path, dst_path, stream_method, channel_name)
-            elif ps_count == 1:
-                pass
-            else:
-                stop_stream_process(channel_name)
-                time.sleep(10)
-                if stream_method == 'streamlink':
-                    start_streamlink(src_path, dst_path, channel_name)
-                else:
-                    start_relay_or_publish(src_path, dst_path, stream_method, channel_name)
+            print check_command % (src_path, dst_path)
+            # ps_count = int(os.popen(check_command % (src_path, dst_path)).read())
+            # if ps_count == 0:
+            #     if stream_method == 'streamlink':
+            #         start_streamlink(src_path, dst_path, channel_name)
+            #     else:
+            #         start_relay_or_publish(src_path, dst_path, stream_method, channel_name)
+            # elif ps_count == 1:
+            #     pass
+            # else:
+            #     stop_stream_process(channel_name)
+            #     time.sleep(10)
+            #     if stream_method == 'streamlink':
+            #         start_streamlink(src_path, dst_path, channel_name)
+            #     else:
+            #         start_relay_or_publish(src_path, dst_path, stream_method, channel_name)

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+from __future__ import absolute_import, unicode_literals
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'StreamSystem.apps.StreamSystemConfig',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -199,3 +201,29 @@ LOGGING = {
         # },
     },
 }
+
+
+import djcelery
+from celery.schedules import crontab
+from datetime import timedelta
+
+djcelery.setup_loader()
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+CELERY_TIMEZONE = TIME_ZONE
+
+CELERY_IMPORTS = (
+    'StreamSystem.tasks',
+)
+
+# CELERYBEAT_SCHEDULE = {
+#     # 'vcenter_alive_check': {
+#     #     'task': 'HostOps.tasks.vcenter_alive_check',
+#     #     'schedule': timedelta(seconds=20),
+#     # }
+#     'test-write-time': {
+#         'task': 'HostOps.tasks.write_time_task',
+#         'schedule': timedelta(seconds=20),
+#     }
+# }
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
