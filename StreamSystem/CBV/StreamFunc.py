@@ -58,15 +58,15 @@ class StartStreamMixin(object):
 
         if self.stream_method == 'streamlink':
             self.title = '_'.join(['Streamlink', self.channel_name, self.now_time])
-            self.log_file = ''.join([streamlink_log_path, 'Streamlink_', self.now_time, '.txt'])
+            self.log_file = ''.join([streamlink_log_path, 'Streamlink_', self.channel_name, '_', self.now_time, '.txt'])
 
         elif self.stream_method == 'relay':
             self.title = '_'.join(['Relay', self.channel_name, self.now_time])
-            self.log_file = ''.join([relay_log_path, 'Relay_', self.now_time, '.txt'])
+            self.log_file = ''.join([relay_log_path, 'Relay_', self.channel_name, '_', self.now_time, '.txt'])
 
         else:   # self.stream_method == 'publish'
             self.title = '_'.join(['Publish', self.channel_name, self.now_time])
-            self.log_file = ''.join([publish_log_path, 'Publish_', self.now_time, '.txt'])
+            self.log_file = ''.join([publish_log_path, 'Publish_', self.channel_name, '_', self.now_time, '.txt'])
 
     def start_streamlink(self, **kwargs):
 

@@ -16,18 +16,21 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from StreamSystem.FBV import views as ss_fbv
 from StreamSystem.CBV import class_based_views as ss_cbv
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^$', ss_views.index),
-    # url(r'^index/$', ss_views.index),
-    # url(r'^show_stream/$', ss_views.show_stream),
-    # url(r'^stream/add/$', ss_views.add_stream),
-    # url(r'^stream/del/$', ss_views.stop_stream),
+    # url(r'^$', ss_fbv.index),
+    # url(r'^index/$', ss_fbv.index),
+    # url(r'^show_stream/$', ss_fbv.show_stream),
+    # url(r'^stream/add/$', ss_fbv.add_stream),
+    # url(r'^stream/del/$', ss_fbv.stop_stream),
     url(r'^$', ss_cbv.index),
     url(r'^index/$', ss_cbv.index),
     url(r'^show_stream/$', ss_cbv.show_stream),
     url(r'^stream/add/$', ss_cbv.StartStream.as_view()),
     url(r'^stream/del/$', ss_cbv.StopStream.as_view()),
+    url(r'^page2/$', ss_fbv.page2),
+    url(r'^get_log/', ss_fbv.show_log_file),
 ]

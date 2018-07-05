@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import datetime
-import json
-import logging
-
-from StreamSystem.FBV.relay_and_publish_func import start_relay_or_publish
-from StreamSystem.FBV.streamlink_func import start_streamlink
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from StreamSystem.FBV.relay_and_publish_func import start_relay_or_publish
+from StreamSystem.FBV.streamlink_func import start_streamlink
 from StreamSystem.FBV.stop_stream_func import stop_stream_process
+
+from StreamSystem.read_log import read_file
 from StreamSystem.models import StreamInfo
+
+import datetime
+import json
+import logging
 
 # Create your views here.
 
@@ -27,6 +29,10 @@ class JsonResponseMixin(object):
 
 def index(request):
     return render(request, 'index.html')
+
+
+def page2(request):
+    return render(request, 'readlog.html')
 
 
 def show_stream(request):
@@ -75,3 +81,14 @@ def stop_stream(request):
 
         reply = stop_stream_process(channel_name)
         return HttpResponse(json.dumps(reply))
+
+
+def show_log_file(request):
+    if request.method == 'GET':
+        return HttpResponse('the return string for test 1111 yahaha~\n' * 20)
+        # channel_name = request.GET.get('channel_name')
+        # if channel_name == '' or channel_name is None:
+        #     return HttpResponse('channel_name is null, please check')
+        # else:
+        #     reply = read_file(channel_name)
+        #     return reply

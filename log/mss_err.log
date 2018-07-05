@@ -144,3 +144,39 @@ Traceback (most recent call last):
   File "D:\Python27\lib\site-packages\django\db\models\sql\compiler.py", line 899, in execute_sql
     raise original_exception
 OperationalError: no such table: djcelery_periodictask
+[ERROR][2018-07-04 18:01:07,934][Thread-9:10832][task_id:django.request][exception.py:135][Internal Server Error: /get_log/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\utils\deprecation.py", line 142, in __call__
+    response = self.process_response(request, response)
+  File "D:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 32, in process_response
+    if response.get('X-Frame-Options') is not None:
+AttributeError: 'unicode' object has no attribute 'get'
+[ERROR][2018-07-04 18:01:49,473][Thread-15:7748][task_id:django.request][exception.py:135][Internal Server Error: /get_log/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\utils\deprecation.py", line 142, in __call__
+    response = self.process_response(request, response)
+  File "D:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 32, in process_response
+    if response.get('X-Frame-Options') is not None:
+AttributeError: 'unicode' object has no attribute 'get'
+[ERROR][2018-07-05 10:47:31,713][Thread-6:8868][task_id:django.request][exception.py:135][Internal Server Error: /get_log/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\utils\deprecation.py", line 142, in __call__
+    response = self.process_response(request, response)
+  File "D:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 32, in process_response
+    if response.get('X-Frame-Options') is not None:
+AttributeError: 'unicode' object has no attribute 'get'
+[ERROR][2018-07-05 10:47:38,013][Thread-7:6036][task_id:django.request][exception.py:135][Internal Server Error: /get_log/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\utils\deprecation.py", line 142, in __call__
+    response = self.process_response(request, response)
+  File "D:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 32, in process_response
+    if response.get('X-Frame-Options') is not None:
+AttributeError: 'unicode' object has no attribute 'get'
