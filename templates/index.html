@@ -110,6 +110,7 @@
                             url: '/stream/del/',
                             dataType: 'json',
                             data: post_data,
+                            headers: {"X-CSRFtoken": Cookies.get("csrftoken")},
                             success: function (res) {
                                 console.log(res);
                                 alert(res['success']);
@@ -139,6 +140,7 @@
                 url: '/stream/add/',
                 dataType: 'json',
                 data: JSON.stringify(mydict),
+                headers: {"X-CSRFtoken": Cookies.get("csrftoken")},
                 success: function (res) {
                     console.log(res);
                     alert(res['success']);

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/js.cookie.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+</head>
+<body>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+{#            <a class="navbar-brand" href="#"></a>#}
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li  class="active"><a href="#">Streams</a></li>
+                <li><a href="/page2/">Check Log</a></li>
+{#                <li class="dropdown">#}
+{#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">下拉菜单<b class="caret"></b></a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li><a href="#">selection 1</a></li>#}
+{#                        <li><a href="#">selection 2</a></li>#}
+{#                        <li><a href="#">selection 3</a></li>#}
+{#                        <li class="divider"></li>#}
+{#                        <li><a href="#">divided selection 1</a></li>#}
+{#                        <li class="divider"></li>#}
+{#                        <li><a href="#">divided selection 2</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+            </ul>
+        </div>
+    </nav>
+    <div id="add_stream1">
+        <form role="form" id="add_stream_form">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <select class="form-control" name="stream_method">
+                        <option>streamlink</option>
+                        <option>relay</option>
+                        <option>publish</option>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="col-lg-3 form-control" name="channel_name" placeholder="channel_name">
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" name="src_path" placeholder="src_path">
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" name="dst_path" placeholder="dst_path">
+                </div>
+            </div>
+{#            <input type="text" name="stream_method" placeholder="stream_method">#}
+        </form>
+        <button type="submit" class="btn btn-default" id="add_stream_btn">Start</button>
+    </div>
+    <br>
+    <p class="col-lg-6 text-white" style="background-color: #613030; color: white; font-size: 20px;" id="p_filter_all">All Streams</p>
+    <p class="col-lg-6 text-white" style="background-color: darkgreen; color: white; font-size: 20px;" id="p_filter_streamlink">Streamlink</p>
+    <p class="col-lg-6 text-white" style="background-color: orangered; color: white; font-size: 20px;" id="p_filter_relay">Relay</p>
+    <p class="col-lg-6 text-white" style="background-color: cornflowerblue; color: white; font-size: 20px;" id="p_filter_publish">Publish</p>
+
+    <div id="stream_info"></div>
+    <script src="{% static "js/start_and_stop_stream.js" %}"></script>
+</body>
+
+</html>
