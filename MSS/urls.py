@@ -13,14 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import urls as auth_urls
 
 from StreamSystem.FBV import views as ss_fbv
 from StreamSystem.CBV import class_based_views as ss_cbv
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^account/', include(auth_urls)),
     # url(r'^$', ss_fbv.index),
     # url(r'^index/$', ss_fbv.index),
     # url(r'^show_stream/$', ss_fbv.show_stream),

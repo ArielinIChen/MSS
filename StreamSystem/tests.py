@@ -20,13 +20,13 @@ class Test(object):
             print 'not matched'
 
     def cat(self):
-        print 'miao miao miao'
+        return 'miao miao miao'
 
     def dog(self):
-        print 'wang wang wang'
+        return 'wang wang wang'
 
     def wolf(self):
-        print 'Ao Wuuuuuu~'
+        return 'Ao Wuuuuuu~'
 
 
 Test('dog')

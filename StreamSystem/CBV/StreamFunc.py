@@ -69,44 +69,58 @@ class StartStreamMixin(object):
             self.log_file = ''.join([publish_log_path, 'Publish_', self.channel_name, '_', self.now_time, '.txt'])
 
     def start_streamlink(self, **kwargs):
+        if self.channel_name == '' or self.channel_name is None:
+            return {'error': 'channel_name cannot be None!'}
+        elif self.src_path == '' or self.src_path is None:
+            return {'error': 'src_path cannot be None!'}
+        elif self.dst_path == '' or self.dst_path is None:
+            return {'error': 'dst_path cannot be None!'}
 
-        ffmpeg_opts = ' -xerror -re -y -loglevel info -i - -threads 2 -flags +global_header ' \
-                      '-c:a libfdk_aac -b:a 96K -ac 2 -ar 44100 -c:v copy -metadata title="%s" -f flv' % self.title
-        command_line = '%s -rtmpdump %s "%s" best -O | %s %s "%s" &> "%s"' \
-                       % (streamlink_cmd, rtmpdump_cmd, self.src_path, ffmpeg_cmd, ffmpeg_opts, self.dst_path, self.log_file)
+        ffmpeg_opts = '%s -xerror -re -y -loglevel info -i - -threads 2 -flags +global_header ' \
+                      '-c:a libfdk_aac -b:a 96K -ac 2 -ar 44100 -c:v copy -metadata title="%s" -f flv "%s"' \
+                      % (ffmpeg_cmd, self.title, self.dst_path)
+        command_line = 'nohup %s --rtmpdump %s "%s" worst -O | %s |& stdbuf -oL tr "\\r" "\\n" 1> "%s" 2>&1 &' \
+                       % (streamlink_cmd, rtmpdump_cmd, self.src_path, ffmpeg_opts, self.log_file)
         print command_line
-        # result = os.system(command_line)
-        # if result == 0:
-        #     StreamInfo.objects.create(src_path=self.src_path,
-        #                               dst_path=self.dst_path,
-        #                               stream_method=self.stream_method,
-        #                               channel_name=self.channel_name)
-        #     return 'success'
-        # else:
-        #     return 'failed'
-        StreamInfo.objects.create(src_path=self.src_path,
-                                  dst_path=self.dst_path,
-                                  stream_method=self.stream_method,
-                                  channel_name=self.channel_name)
-        return {'success': 'Create [%s] method stream: [%s] Done!' % (self.stream_method, self.channel_name)}
+        os.system(command_line)
+        check_ps_cmd_1 = 'ps -ef | grep "streamlink" | grep %s | grep -Ev "grep" | wc -l' % self.src_path
+        check_ps_cmd_2 = 'ps -ef | grep "ffmpeg" | grep %s | grep -Ev "grep" | wc -l' % self.title
+        result_1 = os.popen(check_ps_cmd_1).read()
+        result_2 = os.popen(check_ps_cmd_2).read()
+        if int(result_1) != 0 and int(result_2) != 0:
+            StreamInfo.objects.create(src_path=self.src_path,
+                                      dst_path=self.dst_path,
+                                      stream_method=self.stream_method,
+                                      channel_name=self.channel_name)
+            return {'success': 'Create [%s] method stream: [%s] Done!' % (self.stream_method, self.channel_name)}
+        else:
+            return {'error': 'Create [%s] method stream: [%s] Failed!' % (self.stream_method, self.channel_name)}
+        # StreamInfo.objects.create(src_path=self.src_path,
+        #                           dst_path=self.dst_path,
+        #                           stream_method=self.stream_method,
+        #                           channel_name=self.channel_name)
+        # return {'success': 'Create [%s] method stream: [%s] Done!' % (self.stream_method, self.channel_name)}
         # return {'error': 'Create [%s] method stream: [%s] Failed!' % (self.stream_method, self.channel_name)}
-
 
     def start_publish_or_relay(self, **kwargs):
 
-        command_line = '%s -xerror -y -i "%s" -c:v copy -c:a copy -metadata title="%s" -f flv "%s" &> "%s"' \
+        command_line = '%s -xerror -y -i "%s" -c:v copy -c:a copy -metadata title="%s" -f flv "%s" &> "%s" &' \
                        % (ffmpeg_cmd, self.src_path, self.title, self.dst_path, self.log_file)
+        check_ps_cmd = 'ps -ef | grep "streamlink" | grep %s | grep %s | grep -Ev "grep" | wc -l' % (self.src_path, self.dst_path)
 
         print command_line
+        print check_ps_cmd
         # result = os.system(command_line)
+        # result = os.popen(check_ps_cmd)
+        # if result != 0:
         # if result == 0:
         #     StreamInfo.objects.create(src_path=self.src_path,
         #                               dst_path=self.dst_path,
         #                               stream_method=self.stream_method,
         #                               channel_name=self.channel_name)
-        #     return 'success'
+        #     return {'success': 'Create [%s] method stream: [%s] Done!' % (self.stream_method, self.channel_name)}
         # else:
-        #     return 'failed'
+        #     return {'error': 'Create [%s] method stream: [%s] Failed!' % (self.stream_method, self.channel_name)}
         StreamInfo.objects.create(src_path=self.src_path,
                                   dst_path=self.dst_path,
                                   stream_method=self.stream_method,
@@ -129,7 +143,10 @@ class StopStreamMixin(object):
             dst_path = stream_info.values()[0]['dst_path']
             stream_method = stream_info.values()[0]['stream_method']
 
-            command_line = "ps -ef | grep %s | grep %s | grep -Ev 'grep' | awk '{print $2}' | xargs -n1 kill -9" \
+            if stream_method == 'streamlink':
+                command_line = "ps -ef | grep streamlink | grep %s | grep -Ev 'grep' | awk '{print $2}' | xargs -n1 kill -9" % src_path
+            else:
+                command_line = "ps -ef | grep ffmpeg | grep %s | grep %s | grep -Ev 'grep' | awk '{print $2}' | xargs -n1 kill -9" \
                            % (src_path, dst_path)
             count = 0
             print command_line

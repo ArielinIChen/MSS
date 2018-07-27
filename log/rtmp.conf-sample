@@ -1,0 +1,113 @@
+rtmp_auto_push on;
+rtmp_auto_push_reconnect 1s;
+
+rtmp {
+    server {
+        listen 1935;
+        chunk_size 4096;
+
+        timeout 30s;
+        ping 1m;
+        ping_timeout 30s;
+        #max_stream 64;
+        #ack_window 5000000;
+
+        application live {
+            live on;
+
+            allow play all;
+
+            wait_video on;
+            wait_key on;
+
+            drop_idle_publisher 30s;
+
+            record all;
+            record_path /main_disk/live_record;
+            # max size : 24GB
+            record_max_size 25769803776;
+            # append current timestamp to each flv
+            record_unique on;
+        }
+
+        application delay {
+            live on;
+
+            allow play all;
+
+            wait_video on;
+            wait_key on;
+
+            drop_idle_publisher 30s;
+        }
+
+        application vod {
+            live on;
+
+            allow play all;
+
+            wait_video on;
+            wait_key on;
+
+            drop_idle_publisher 30s;
+        }
+
+        application relay {
+            live on;
+
+            allow play all;
+
+            wait_video on;
+            wait_key on;
+
+            drop_idle_publisher 30s;
+        }
+
+        application app {
+            live on;
+            hls on;
+            hls_nested on;
+            hls_continuous on;
+            hls_cleanup on;
+
+            hls_fragment_slicing aligned;
+            hls_fragment 4s;
+            hls_playlist_length 80s;
+
+            hls_path /mnt/sdc1/slice;
+
+            allow publish 127.0.0.1;
+            allow publish 115.159.94.221;
+            allow publish 14.23.88.253;
+            deny publish all;
+            allow play all;
+        }
+
+        application live2 {
+            live on;
+
+            wait_video on;
+            wait_key on;
+
+            drop_idle_publisher 20s;
+        }
+
+        application flv {
+            play /var/imbatv_flv;
+        }
+
+        application mp4 {
+            play /var/imbatv_mp4;
+        }
+    }
+}
+
+
+cmd: /usr/local/bin/av_publish -xerror -y -i "rtmp://127.0.0.1/match/MatchStream_c2" -c:v copy -c:a copy  -metadata title='anycast_AnyCast_2_7e4341a07ed059bcda17e0937a0fe445' -f flv 'rtmp://douyu.com/helloworld_test' &> '/main_disk/logs/switch_rtmp/switch_rtmp-06-25-14-38-38-1183606628-AnyCast_2.txt'
+
+
+
+cmd: /usr/local/bin/streamlink --http-cookie cid=8991c91135bd5ad6fd8a9f988ae0b897_Streamlink_4_7e4341a07ed059bcda17e0937a0fe445 --rtmpdump /usr/local/bin/rtmpdump "https://www.panda.tv/imbachiji" best -O |  /usr/local/bin/av_publish -xerror -re -y -loglevel info -i - -threads 2 -flags +global_header -c:a libfdk_aac -b:a 96K -ac 2 -ar 44100 -c:v copy -metadata title='switch_Streamlink_4_7e4341a07ed059bcda17e0937a0fe445' -f flv 'rtmp://127.0.0.1/match/segment_pubg' &> '/main_disk/logs/switch_rtmp/switch_rtmp-06-25-10-59-00-698867512-Streamlink_4.txt'
+
+
+

@@ -50,13 +50,6 @@
                 </tr>
             </tbody>
         </table>
-    {#    <form class="form-inline" role="form" id="form1">#}
-    {#        <div class="form-group">#}
-    {#            <input type="text" class="form-control" style="width: 25%" id="name" name="channel_name" placeholder="channel_name">#}
-    {#        </div>#}
-    {#    </form>#}
-    {#    <button type="submit" class="btn btn-default" id="form1_btn">开始查看日志</button>#}
-    {#    <button type="submit" class="btn btn-default" id="stop_form1_btn">暂停</button>#}
         <br>
         <div id="show_log_file"></div>
     </div>
@@ -71,11 +64,16 @@
                 data: mytext,
                 success: function (res) {
                     console.log(res);
-                    $("div#show_log_file").html(res);
+                    var html = "";
+                    for (var i = 0; i < res.length; i++) {
+                        html += '<p align="left" style="font-size: 16px">' + res[i] + '</p>';
+                    }
+                    $("div#show_log_file").html(html);
                 },
                 error: function (err) {
                     console.log(err);
-                    alert(err);
+                    $("div#show_log_file").html(err);
+{#                    alert(err);#}
                 }
             })
         }

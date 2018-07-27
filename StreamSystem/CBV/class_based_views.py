@@ -5,7 +5,7 @@ import datetime
 import json
 import logging
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import render
 from django.views.generic import View
 
@@ -22,6 +22,10 @@ class JsonResponseMixin(object):
     @staticmethod
     def json_response(content):
         return HttpResponse(json.dumps(content))
+
+    @staticmethod
+    def json_error_response(content):
+        return HttpResponseServerError(json.dumps(content))
 
 
 def index(request):
@@ -57,11 +61,15 @@ class StartStream(JsonResponseMixin, View):
         elif len(channel_name_in_db) > 0:
             return HttpResponse(json.dumps({'error': 'Duplicate channel_name !'}))
         else:
-            reply = StartStreamMixin(channel_name, stream_method, src_path, dst_path)
+            t_reply = StartStreamMixin(channel_name, stream_method, src_path, dst_path)
             if stream_method == 'streamlink':
-                return self.json_response(reply.start_streamlink())
+                reply = t_reply.start_streamlink()
             else:
-                return self.json_response(reply.start_publish_or_relay())
+                reply = t_reply.start_publish_or_relay()
+            if 'success' in reply.keys():
+                return self.json_response(reply)
+            else:
+                return self.json_error_response(reply)
 
 
 class StopStream(JsonResponseMixin, View):

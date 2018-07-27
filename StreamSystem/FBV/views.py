@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+import json
+import logging
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from StreamSystem.FBV.relay_and_publish_func import start_relay_or_publish
-from StreamSystem.FBV.streamlink_func import start_streamlink
 from StreamSystem.FBV.stop_stream_func import stop_stream_process
-
-from StreamSystem.read_log import read_file
+from StreamSystem.FBV.streamlink_func import start_streamlink
 from StreamSystem.models import StreamInfo
-
-import datetime
-import json
-import logging
 
 # Create your views here.
 
@@ -91,4 +89,4 @@ def show_log_file(request):
         #     return HttpResponse('channel_name is null, please check')
         # else:
         #     reply = read_file(channel_name)
-        #     return reply
+        #     return HttpResponse(json.dumps(reply))

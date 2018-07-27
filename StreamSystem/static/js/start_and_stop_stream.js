@@ -129,6 +129,9 @@ $(document).ready(function ShowStreamsInDb() {
                     $('.stream_method_bgcolor_css').css('background-color', 'cornflowerblue');
                 });
             }
+            else {
+                document.getElementById("stream_info").innerHTML='<p>Nothing to show</p>';
+            }
         },
         error: function(err) {
             console.log(err['error']);
@@ -154,7 +157,7 @@ $(document).ready(function ShowStreamsInDb() {
             },
             error: function (err) {
                 console.log(err);
-                alert(err['error']);
+                alert(err['responseJSON']['error']);
             }
         })
     })

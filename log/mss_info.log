@@ -204,3 +204,52 @@ Traceback (most recent call last):
 AttributeError: 'unicode' object has no attribute 'get'
 [WARNING][2018-07-05 14:29:43,717][Thread-4:6848][task_id:django.request][base.py:152][Not Found: /favicon.ico]
 [WARNING][2018-07-05 14:33:34,927][Thread-24:2636][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[ERROR][2018-07-09 17:15:13,509][Thread-4:6736][task_id:django.request][exception.py:135][Internal Server Error: /stream/add/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\core\handlers\base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Python27\lib\site-packages\django\core\handlers\base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Python27\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Python27\lib\site-packages\django\views\generic\base.py", line 88, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\MyPythonProject\MSS\StreamSystem\CBV\class_based_views.py", line 62, in post
+    return self.json_response(reply.start_streamlink)
+  File "D:\MyPythonProject\MSS\StreamSystem\CBV\class_based_views.py", line 24, in json_response
+    return HttpResponse(json.dumps(content))
+  File "D:\Python27\lib\json\__init__.py", line 244, in dumps
+    return _default_encoder.encode(obj)
+  File "D:\Python27\lib\json\encoder.py", line 207, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "D:\Python27\lib\json\encoder.py", line 270, in iterencode
+    return _iterencode(o, 0)
+  File "D:\Python27\lib\json\encoder.py", line 184, in default
+    raise TypeError(repr(o) + " is not JSON serializable")
+TypeError: <bound method StartStreamMixin.start_streamlink of <StreamSystem.CBV.StreamFunc.StartStreamMixin object at 0x03FE1AF0>> is not JSON serializable
+[WARNING][2018-07-09 18:16:08,058][Thread-30:2264][task_id:django.security.csrf][csrf.py:160][Forbidden (CSRF cookie not set.): /stream/add/]
+[WARNING][2018-07-09 18:16:19,680][Thread-31:9588][task_id:django.security.csrf][csrf.py:160][Forbidden (CSRF cookie not set.): /stream/add/]
+[WARNING][2018-07-09 18:16:41,049][Thread-32:11084][task_id:django.security.csrf][csrf.py:160][Forbidden (CSRF cookie not set.): /stream/del/]
+[WARNING][2018-07-09 18:16:47,959][Thread-36:2060][task_id:django.security.csrf][csrf.py:160][Forbidden (CSRF cookie not set.): /stream/del/]
+[WARNING][2018-07-10 09:08:44,920][Thread-5:1220][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[WARNING][2018-07-27 10:26:36,759][Thread-1:10276][task_id:django.request][base.py:152][Not Found: /account]
+[WARNING][2018-07-27 10:26:37,299][Thread-3:10280][task_id:django.request][base.py:152][Not Found: /favicon.ico]
+[ERROR][2018-07-27 10:26:56,486][Thread-5:10460][task_id:django.request][exception.py:135][Internal Server Error: /account/login/]
+Traceback (most recent call last):
+  File "D:\Python27\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+    response = get_response(request)
+  File "D:\Python27\lib\site-packages\django\core\handlers\base.py", line 217, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Python27\lib\site-packages\django\core\handlers\base.py", line 215, in _get_response
+    response = response.render()
+  File "D:\Python27\lib\site-packages\django\template\response.py", line 107, in render
+    self.content = self.rendered_content
+  File "D:\Python27\lib\site-packages\django\template\response.py", line 82, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "D:\Python27\lib\site-packages\django\template\response.py", line 64, in resolve_template
+    return select_template(template, using=self.using)
+  File "D:\Python27\lib\site-packages\django\template\loader.py", line 53, in select_template
+    raise TemplateDoesNotExist(', '.join(template_name_list), chain=chain)
+TemplateDoesNotExist: registration/login.html

@@ -15,3 +15,14 @@ class StreamInfo(models.Model):
 
     def __unicode__(self):
         return self.channel_name
+
+
+class User(models.Model):
+    username = models.CharField(max_length=50, blank=False)
+    password = models.CharField(max_length=50, blank=False)
+    # email = models.EmailField(blank=True, default=None)
+    create_time = models.DateTimeField(auto_now=True)
+    last_login_time = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.username
