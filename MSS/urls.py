@@ -33,6 +33,8 @@ urlpatterns = [
     url(r'^show_stream/$', ss_cbv.show_stream),
     url(r'^stream/add/$', ss_cbv.StartStream.as_view()),
     url(r'^stream/del/$', ss_cbv.StopStream.as_view()),
-    url(r'^page2/$', ss_fbv.page2),
+    url(r'^check_log/$', ss_fbv.check_log),
     url(r'^get_log/', ss_fbv.show_log_file),
+    url(r'^login/', ss_fbv.login_page),
+    url(r'^register/', ss_fbv.register_page),
 ]

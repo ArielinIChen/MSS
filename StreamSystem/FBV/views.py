@@ -6,12 +6,13 @@ import json
 import logging
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password, check_password
 
 from StreamSystem.FBV.relay_and_publish_func import start_relay_or_publish
 from StreamSystem.FBV.stop_stream_func import stop_stream_process
 from StreamSystem.FBV.streamlink_func import start_streamlink
-from StreamSystem.models import StreamInfo
+from StreamSystem.models import StreamInfo, User
 
 # Create your views here.
 
@@ -25,12 +26,50 @@ class JsonResponseMixin(object):
         return HttpResponse(json.dumps(content))
 
 
+def encode_pw(ori_pw):
+    # tmp_pw = make_password(ori_pw, '123456').split('$')[3]
+    tmp_pw_plus_salt = str(ori_pw) + 'what1the@fuck3is$that5'
+    return make_password(tmp_pw_plus_salt)
+
+
 def index(request):
     return render(request, 'index.html')
 
 
-def page2(request):
-    return render(request, 'readlog.html')
+def check_log(request):
+    return render(request, 'check_log.html')
+
+
+def login_page(request):
+    if request.session.get('is_login', None):
+        return redirect('/index/')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print username, password
+        if username == '' or username is None or password == '' or password is None:
+            return HttpResponse('username or password cannot be None')
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            return HttpResponse('username: %s not found' % username)
+        else:
+            pw_input = encode_pw(ori_pw=password)
+            pw_in_db = user.password
+            if not check_password(pw_input, pw_in_db):
+                return HttpResponse('username and password not match')
+            else:
+                request.session['is_login'] = True
+                request.session['username'] = username
+                resp = redirect('/index/')
+                resp.set_cookie('username', username, 60*60*7)
+                return resp
+    else:
+        return render(request, 'login_page.html')
+
+
+def register_page(request):
+    return render(request, 'register_page.html')
 
 
 def show_stream(request):
